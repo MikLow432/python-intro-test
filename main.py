@@ -1,4 +1,5 @@
-import my_python_package as mpp
+import pandas as pd
+"""import my_python_package as mpp"""
 
 def main():
     print("Hello from python-intro-test!")
@@ -6,3 +7,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+print(add(1,2))
