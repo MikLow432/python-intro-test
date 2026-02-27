@@ -1,3 +1,6 @@
+[build-system]
+requires = ["setuptools"]
+
 [project]
 name = "python-intro-test"
 version = "0.1.0"
