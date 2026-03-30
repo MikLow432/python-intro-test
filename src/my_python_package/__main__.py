@@ -1,3 +1,4 @@
+import math
 from importlib import resources
 
 import pandas as pd
@@ -15,8 +16,29 @@ def summary(df):
 def correlation(df):
     print("\nCorrelations:")
     cors = df.corr(numeric_only=True)
-    print(cors)
+    print(cors.round(3))
     return cors
+
+
+def histogram(df):
+    df = df.select_dtypes(include="number")
+
+    cols = df.columns.tolist()
+    width = min(len(cols),4)
+    height = math.ceil(len(cols)/width)
+
+    fig, axes = plt.subplots(nrows= height, ncols=width, figsize=(4*width, 4*height))
+    axes = np.array(axes).reshape(-1)
+
+    for col, ax in zip(cols, axes):
+        df[col].hist(ax=ax)
+        ax.set_title(f"Histogram of {col}")
+
+    for ax in axes[len(cols):]:
+        ax.set_visible(False)
+
+    plt.tight_layout()
+
 
 def scatter(df,cors,thresh= 0.25):
 
@@ -28,11 +50,14 @@ def scatter(df,cors,thresh= 0.25):
     print("\nCorrelations over Threshold:")
     print(pairs)
 
-    width = len(pairs)
-    fig, axes = plt.subplots(nrows=1, ncols=width, figsize=(4 * width, 4))
+    if len(pairs) == 0:
+        print("No correlations above threshold")
+        return
 
-    if len(pairs) == 1:
-        axes = [axes]
+    width = min(len(pairs), 4)
+    height = math.ceil(len(pairs) / width)
+    fig, axes = plt.subplots(nrows=height, ncols=width, figsize=(4*width, 4*height))
+    axes = np.array(axes).reshape(-1)
 
     for i in range(len(pairs)):
         col_x = pairs.iloc[i, 0]
@@ -40,22 +65,10 @@ def scatter(df,cors,thresh= 0.25):
         df.plot.scatter(x=col_x, y=col_y, ax=axes[i], alpha=0.6)
         axes[i].set_title(f"Scatter:\n {col_x} vs\n {col_y}")
 
+    for ax in axes[len(pairs):]:
+        ax.set_visible(False)
+
     plt.tight_layout()
-
-def histogram(df):
-    cols = df.columns.values.tolist()
-    width = len(cols)
-
-    fig, axes = plt.subplots(nrows=1, ncols=width, figsize=(4*width, 4))
-
-    if len(cols) == 1:
-        axes = [axes]
-
-    for col, ax in zip(cols, axes):
-        df[col].hist(ax=ax)
-        ax.set_title(f"Histogram of {col}")
-    plt.tight_layout()
-
 
 def main(path,thresh=0.25):
     df = load_data(path)
@@ -70,10 +83,11 @@ import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", default=None)
+    parser.add_argument("--thresh", type=float, default=0.25)
     args = parser.parse_args()
 
     if args.file:
-        main(args.file)
+        main(args.file, args.thresh)
     else:
         path = resources.files("my_python_package").joinpath("Income.csv")
-        main(path)
+        main(path, args.thresh)

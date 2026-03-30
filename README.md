@@ -44,6 +44,12 @@ This will:
 4. Generate histograms
 5. Generate scatter plots for correlated variables
 
+Run the tool on your own dataset using:
+
+```bash
+py -m uv run -m my_python_package --file mydata.csv --thresh 0.25
+```
+
 ---
 
 ## Project Structure
