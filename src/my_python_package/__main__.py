@@ -27,7 +27,7 @@ def histogram(df):
     width = min(len(cols),4)
     height = math.ceil(len(cols)/width)
 
-    fig, axes = plt.subplots(nrows= height, ncols=width, figsize=(4*width, 4*height))
+    fig, axes = plt.subplots(nrows= height, ncols= width, figsize=(4*width, 4*height))
     axes = np.array(axes).reshape(-1)
 
     for col, ax in zip(cols, axes):
@@ -56,7 +56,7 @@ def scatter(df,cors,thresh= 0.25):
 
     width = min(len(pairs), 4)
     height = math.ceil(len(pairs) / width)
-    fig, axes = plt.subplots(nrows=height, ncols=width, figsize=(4*width, 4*height))
+    fig, axes = plt.subplots(nrows= height, ncols= width, figsize=(4*width, 4*height))
     axes = np.array(axes).reshape(-1)
 
     for i in range(len(pairs)):
