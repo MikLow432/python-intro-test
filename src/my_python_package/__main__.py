@@ -1,5 +1,6 @@
 import math
 from importlib import resources
+import argparse
 
 import pandas as pd
 import numpy as np
@@ -70,20 +71,33 @@ def scatter(df,cors,thresh= 0.25):
 
     plt.tight_layout()
 
-def main(path,thresh=0.25):
+def main(path, thresh=0.25, no_plots=False, summary_only=False):
     df = load_data(path)
-    summary(df)
-    cors = correlation(df)
-    histogram(df)
-    scatter(df,cors,thresh)
-    plt.show()
 
-import argparse
+    if args.cols:
+        df = df[args.cols]
+
+    summary(df)
+
+    if summary_only:
+        return
+
+    cors = correlation(df)
+
+    if not no_plots:
+        histogram(df)
+        scatter(df, cors, thresh)
+        plt.show()
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", default=None)
     parser.add_argument("--thresh", type=float, default=0.25)
+    parser.add_argument("--no-plots", action="store_true")
+    parser.add_argument("--summary-only", action="store_true")
+    parser.add_argument("--cols", nargs="+")
     args = parser.parse_args()
 
     if args.file:

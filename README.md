@@ -3,9 +3,9 @@
 ## Description
 
 This project is a command-line data analysis tool written in Python.
-It allows users to quickly load a dataset, compute summary statistics, analyze correlations, and generate visualizations.
+It enables quick exploratory analysis of datasets by computing summary statistics, correlations, and generating visualizations.
 
-The tool is designed for simple and fast exploratory data analysis.
+The tool is designed for flexible and efficient analysis directly from the terminal.
 
 ---
 
@@ -13,8 +13,11 @@ The tool is designed for simple and fast exploratory data analysis.
 
 * Summary statistics (mean, std, min, max, quartiles)
 * Correlation matrix for numerical variables
-* Histograms for all columns
+* Histograms for all numeric columns
 * Scatter plots for highly correlated variable pairs
+* Configurable correlation threshold
+* Optional column selection
+* Optional disabling of plots
 
 ---
 
@@ -30,24 +33,62 @@ py -m uv pip install -e .
 
 ## Usage
 
-Run the tool using:
+Run the tool with:
 
 ```bash
 py -m uv run -m my_python_package
 ```
 
-This will:
+---
 
-1. Load the included dataset (`Income.csv`)
-2. Print summary statistics
-3. Show correlations
-4. Generate histograms
-5. Generate scatter plots for correlated variables
-
-Run the tool on your own dataset using:
+## Command-Line Options
 
 ```bash
-py -m uv run -m my_python_package --file mydata.csv --thresh 0.25
+--file PATH           Path to a CSV dataset
+--thresh FLOAT        Correlation threshold (default: 0.25)
+--no-plots            Disable all visualizations
+--summary-only        Only display summary statistics
+--cols COL1 COL2 ...  Select specific columns for analysis
+```
+
+---
+
+## Examples
+
+### Default run (uses included dataset)
+
+```bash
+py -m uv run -m my_python_package
+```
+
+### Use a custom dataset
+
+```bash
+py -m uv run -m my_python_package --file data.csv
+```
+
+### Only summary statistics
+
+```bash
+py -m uv run -m my_python_package --summary-only
+```
+
+### Disable plots
+
+```bash
+py -m uv run -m my_python_package --no-plots
+```
+
+### Set correlation threshold
+
+```bash
+py -m uv run -m my_python_package --thresh 0.5
+```
+
+### Analyze selected columns only
+
+```bash
+py -m uv run -m my_python_package --cols age income education
 ```
 
 ---
@@ -79,9 +120,9 @@ project-root/
 
 ## Notes
 
-* The dataset is included in the package.
-* The tool focuses on numerical columns for correlation analysis.
-* Scatter plots are only created for variable pairs with correlation above a threshold (default: 0.25).
+* Only numeric columns are used for correlation and plotting.
+* Scatter plots are generated only for variable pairs with correlation above the specified threshold.
+* The default dataset (`Income.csv`) is included in the package.
 
 ---
 
